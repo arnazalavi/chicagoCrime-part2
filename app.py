@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/chicago_crime"
 mongo = PyMongo(app)
 
-# Render to the crimeDataIndex.html
+
 
 # default route
 # add route
@@ -21,35 +21,17 @@ mongo = PyMongo(app)
 @app.route('/index')
 def index():
     return render_template('index.html')
-# def index():
-# #def readGeoJson2():
-#     #cursor= mongo.db.events.find()
-#     # cursor=mongo.db.events.find({'properties': {"primary_type":"HOMICIDE"}})
-#     cursor= mongo.db.events.find({ '$or': [{'properties.primary_type': 'HOMICIDE'}, {'properties.primary_type': 'THEFT'}] })
-#     #cursor= mongo.db.events.find({ '$or': [{'properties.primary_type': 'HOMICIDE'}, {'properties.primary_type': 'THEFT'}] })
-#     # #print(cursor)
-#     features=[]
-#     for geojson_feature  in cursor:
-#        features.append({
-#            "type": geojson_feature['type'],
-#           "geometry":  geojson_feature['geometry'],
-#            "properties" :  geojson_feature['properties']
-#            }
-#         )
-#     # print(features)
-#     data = { 'features' : features}
-#     # print(data)
-#     data = json.dumps(data)
-#     #data = 'Hello'
-#     return render_template('index.html', geojson=data)
+
 
 @app.route('/selectorpage', methods=['GET','POST'])
 def selector():
     selector = 'HOMICIDE'
+    #selector = "BATTERY"
     if request.method == 'POST':
         selector = request.form.get("selector_listener", None)
 
-    cursor= mongo.db.events.find({ '$and': [{'properties.year': '2018'}, {'properties.primary_type': selector}] }) 
+    #cursor= mongo.db.events.find({ '$and': [{'properties.year': '2020'}, {'properties.primary_type': selector}] }) 
+    cursor= mongo.db.events.find({ '$and': [{'properties.year': '2020'}, {'properties.primary_type': selector}] }) 
     features=[]
     for geojson_feature  in cursor:
        features.append({
@@ -76,7 +58,9 @@ def readGeoJson():
     #cursor=mongo.db.events.find({'properties': {"primary_type":"HOMICIDE"}})
     #cursor= mongo.db.events.find({'properties.primary_type':"HOMICIDE"})
     selector = "HOMICIDE"
-    cursor= mongo.db.events.find({ '$and': [{'properties.id': '23757'}, {'properties.primary_type': selector}] }) 
+    #selector = "BATTERY"
+    #cursor= mongo.db.events.find({ '$and': [{'properties.id': '23757'}, {'properties.primary_type': selector}] }) 
+    cursor= mongo.db.events.find({ '$and': [{'properties.year': '2020'}, {'properties.primary_type': selector}] }) 
     features=[]
     for geojson_feature  in cursor:
        features.append({
